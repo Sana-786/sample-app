@@ -1,0 +1,37 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: argocd-application-controller-role
+rules:
+  # Core Kubernetes resources
+  - apiGroups: [""]
+    resources: [
+      "limitranges",
+      "namespaces",
+      "pods",
+      "services",
+      "configmaps",
+      "secrets",
+      "replicationcontrollers",
+      "resourcequotas"
+    ]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+  # AWS VPC CNI CRD
+  - apiGroups: ["vpcresources.k8s.aws"]
+    resources: ["cninodes"]
+    verbs: ["get", "list", "watch"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: argocd-application-controller-binding
+subjects:
+  - kind: ServiceAccount
+    name: argocd-application-controller
+    namespace: argocd-new
+roleRef:
+  kind: ClusterRole
+  name: argocd-application-controller-role
+  apiGroup: rbac.authorization.k8s.io
