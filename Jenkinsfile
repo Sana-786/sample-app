@@ -40,12 +40,12 @@ pipeline {
       }
     }
 
-    stage('Update K8s Manifest') {
+    stage('Update K8s Menifest') {
       steps {
         script {
           echo "🧾 Updating Kubernetes manifest with new image tag..."
           sh """
-            sed -i 's|image: .*|image: ${ECR_REPO}:${IMAGE_TAG}|g' manifests/deployment.yaml
+            sed -i 's|image: .*|image: ${ECR_REPO}:${IMAGE_TAG}|g' menifests/deployment.yaml
           """
         }
       }
@@ -58,7 +58,7 @@ pipeline {
           sh """
             git config --global user.email "sanasiddiqui1999@gmail.com"
             git config --global user.name "sana siddiqui"
-            git add manifests/deployment.yaml
+            git add menifests/deployment.yaml
             git commit -m "Update image tag to ${IMAGE_TAG}" || echo "No changes to commit"
           """
         }
